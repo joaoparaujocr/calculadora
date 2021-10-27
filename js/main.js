@@ -68,6 +68,14 @@ function createCalculator() {
                             this.view.value = this.view.value.slice(0, -1);
                             break;
 
+                        case 'parenthese-open':
+                            this.view.value = elementClick.innerText;
+                            break;
+                            
+                        case 'parenthese-close':
+                            this.view.value = elementClick.innerText;
+                            break;
+                        
                         case 'equals':
                             this.doCalculation();
                             break;
