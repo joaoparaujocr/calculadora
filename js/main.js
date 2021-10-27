@@ -1,90 +1,84 @@
 function createCalculator() {
     return {
-        display: document.querySelector('#view'),
-        btnClear: document.querySelector('#clear'),
-
-        //method
-        performAccount(){
-            let conta = this.display.value;
-
-            try {
-                conta = eval(conta.replace(/×/g, '*').replace(/÷/g, '/'));
-
-                if(conta === 0){
-                    this.display.value = conta;
-                    return;
-                }
-
-                if(!conta){
-                    this.display.value = 'ERROR';
-                    return;
-                }
-
-                this.display.value = conta;
-            } catch (error) {
-                this.display.value = 'ERROR';
-            }
+        view: document.querySelector('#view'),
+        start() {
+            this.view.focus();
+            this.clickButtons();
+            this.keyPress();
         },
-
-        enterPress(){
-            this.display.addEventListener('keypress', (e) => {
-                if(e.charCode === 13){
-                    this.performAccount();
+        keyPress() {
+            this.view.addEventListener('keypress', (e) => {
+                if(e.charCode === 12){
+                    this.start();
                 }
             })
         },
+        doCalculation() {
+            let valueCalc = this.view.value;
+            valueCalc = eval(valueCalc.replace(/×/g, '*').replace(/÷/g, '/'));
+            try {
+                if(valueCalc === 0){
+                    this.view.value = '0';
+                }
+                
+                if(!valueCalc){
+                    this.view.value = 'Error';
+                }
 
-        backSpace() {
-            this.display.value = this.display.value.slice(0, -1)
+                this.view.value = valueCalc;
+            } catch (error) {
+                this.view.value = 'Error'
+            }
         },
-
-        clearDisplay() {
-            this.display.value = ''
-        },
-
-        start() {
-            this.clickButtons();
-            this.clearDisplay();
-            this.enterPress();
-        },
-
         clickButtons(){
-            document.addEventListener('click', function(e) {
-                const el = e.target;
-                const elemento = el.classList
-
-                if(elemento.contains('btn-number')) {
-                    this.btnForViewer(el.innerText);
+            document.addEventListener('click', (e) => {
+                const elementClick = e.target;
+                if(elementClick.classList.contains('btn-number')){
+                    this.view.value += elementClick.innerText;
                 }
 
-                if(el.classList.contains('btn')) {
-                    if(elemento.contains('fa-percentage')) this.btnForViewer('%');
-                    if(elemento.contains('fa-times')) this.btnForViewer('×');
-                    if(elemento.contains('fa-minus')) this.btnForViewer('-');
-                    if(elemento.contains('fa-plus')) this.btnForViewer('+');
-                    if(elemento.contains('fa-divide')) this.btnForViewer('÷');
-                    this.btnForViewer(el.innerText)
-                }
+                if(elementClick.classList.contains('btn')) {
+                    const elId = elementClick.getAttribute('id')
+                    switch (elId) {
+                        case 'minus':
+                            this.view.value += '-'
+                            break;
 
-                if(el.getAttribute('id') === 'clear') {
-                    this.clearDisplay()
-                }
+                        case 'plus':
+                            this.view.value += '+'
+                            break;
 
-                if(el.getAttribute('id') === 'backspace') {
-                    this.backSpace();
-                }
+                        case 'divide':
+                            this.view.value += '÷'
+                            break;
 
-                if(el.getAttribute('id') === 'equals') {
-                    this.performAccount();
-                }
-            }.bind(this));
-        },
+                        case 'times':
+                            this.view.value += '×'
+                            break;
 
-        btnForViewer(value) {
-            this.display.value += value;
+                        case 'percentage':
+                            this.view.value += '%'
+                            break;
+
+                        case 'clear':
+                            this.view.value = '';
+                            break;
+
+                        case 'backspace':
+                            this.view.value = this.view.value.slice(0, -1);
+                            break;
+
+                        case 'equals':
+                            this.doCalculation();
+                            break;
+                        default:
+                            break;
+                    }
+                }
+            })
         }
-    };
+    }
 }
 
-const calculator = createCalculator()
+const calculator = createCalculator();
 calculator.start();
