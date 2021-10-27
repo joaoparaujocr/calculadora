@@ -15,8 +15,8 @@ function createCalculator() {
         },
         doCalculation() {
             let valueCalc = this.view.value;
-            valueCalc = eval(valueCalc.replace(/×/g, '*').replace(/÷/g, '/'));
             try {
+                valueCalc = eval(valueCalc.replace(/×/g, '*').replace(/÷/g, '/'));
                 if(valueCalc === 0){
                     this.view.value = '0';
                 }
