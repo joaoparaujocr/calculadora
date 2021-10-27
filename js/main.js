@@ -69,11 +69,11 @@ function createCalculator() {
                             break;
 
                         case 'parenthese-open':
-                            this.view.value = elementClick.innerText;
+                            this.view.value += elementClick.innerText;
                             break;
                             
                         case 'parenthese-close':
-                            this.view.value = elementClick.innerText;
+                            this.view.value += elementClick.innerText;
                             break;
                         
                         case 'equals':
